@@ -8,4 +8,4 @@ Implementing database can be one solution to speed up the process to some extent
 Another is that there is no web front end to it.<br>
 
 # Running the program
-In terminal, run "python3 webclawer".<br>
+In terminal, run "python3 webcrawler".<br>

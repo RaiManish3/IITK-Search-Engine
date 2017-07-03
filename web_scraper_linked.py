@@ -5,14 +5,13 @@ import queue
 
 MAX_DEPTH = 10
 ln_with_key = []
-#key = r'[\A\s]'+re.escape('esc101')+r'\s'
 iterations = 0
 #the arguments to be passed , url_list  and key
 def scan_all_links(url_list,key):
     global iterations
-    if not url_list or iterations>MAX_DEPTH: return
-    url = url_list[0]
-    del url_list[0]
+    if url_list.empty() or iterations>MAX_DEPTH: return
+    url = url_list.get()
+    #del url_list[0]
     data=''
     iterations+=1
     try:
@@ -34,7 +33,7 @@ def scan_all_links(url_list,key):
                 flag2=True
                 break
         if flag2: continue
-        url_list.append(the_url)
+        url_list.put(the_url)
 
     #check if the current 'url' contains the key
     all_text = soup.get_text()
@@ -51,6 +50,3 @@ def getRelatedList(url_list, key):
     scan_all_links(url_list,key)
     return list(set(ln_with_key))[:]
 
-#if __name__ == '__main__':
-#    scan_all_links(['http://home.iitk.ac.in/~rmanish/'])
-#    print (ln_with_key)

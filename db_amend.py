@@ -59,18 +59,14 @@ def queryStudent(name='', year=None, gender='', program='', hall='', department=
     conn.close()
     return data
 
-
 def queryYear(year):
     conn = sqlite3.connect('student.db')
     c = conn.cursor()
-    # for Y15
-    query=str(year)+'%'
-    print(query)
-    c.execute("SELECT rollno, email FROM iitk_students WHERE rollno LIKE ?",(query,))
+    year=str(year)+'%'
+    c.execute("SELECT rollno, email FROM iitk_students WHERE rollno LIKE ?",(year,))
     data = c.fetchall()
-    #print(data)
     conn.close()
     return data
 
-#queryYear(15)
+
 #print(queryStudent(name=input('Enter name: '),year=input('Enter year: ')))

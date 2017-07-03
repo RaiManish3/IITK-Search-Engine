@@ -7,7 +7,10 @@ from bs4 import BeautifulSoup
 #import the file from different directory
 import sys
 sys.path.insert(0, 'Student_Search')
-import st_search as ss
+
+import queue
+
+#import st_search as ss
 import web_scraper_linked as wsl
 import db_amend as dbA
 
@@ -41,7 +44,9 @@ def queryOnYear(year):
         if not re.search('index',title_of_page,re.IGNORECASE):
             #find all links on that page containing the key
             #links_to makes more sense if it is Priority queue
-            links_to = wsl.getRelatedList([end_url], key)
+            q = queue.Queue()
+            q.put(end_url)
+            links_to = wsl.getRelatedList(q, key)
             #check for hits
             for link_elem in links_to:
                 if link_elem in links_dic.keys():

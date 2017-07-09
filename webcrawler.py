@@ -1,8 +1,6 @@
+## currently implemented for python 3.x
 import urllib.request as ul
 import re
-#uncomment below if working on python 2.x
-#but then you need to change the student search code as well using python 2.x urllib2 instead of urllib.reqest
-#from BeautifulSoup import *
 from bs4 import BeautifulSoup
 #import the file from different directory
 import sys
@@ -14,17 +12,22 @@ import queue
 import web_scraper_linked as wsl
 import db_amend as dbA
 
-# make predictive.(i.e can handle common errors)
-key = input('Enter the search query: ')
-# for reg ex : we take key to be independent word
-key = r'[\A\s]'+re.escape(key)+r'\s'
-url = 'http://home.iitk.ac.in/~'
-#make a dictionary of all the links encountered having key
-links_dic={}
-max_entries = 100           #limit max entries for searches , we aren't using databses now so need to do this
 
-#while roll < limit_roll:
-def queryOnYear(year):
+url = 'http://home.iitk.ac.in/~'
+
+def searchTheWeb(year):
+
+    #------------------------------------------------------ all variables
+
+    # make predictive.(i.e can handle common errors)
+    key = input('Enter the search query: ')
+    # for reg ex : we take key to be independent word
+    key = r'[\A\s]'+re.escape(key)+r'\s'
+    #make a dictionary of all the links encountered having key
+    links_dic={}
+
+    #------------------------------------------------------ all variables
+
     st_info = dbA.queryYear(year)
     for (roll,mail) in st_info:
         user = mail.split('@')[0]
@@ -55,5 +58,4 @@ def queryOnYear(year):
                     links_dic[link_elem]=1
         print(roll,user)
 
-queryOnYear(15)
-print (links_dic)
+    print(links_dic)

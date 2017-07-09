@@ -11,7 +11,6 @@ def scan_all_links(url_list,key):
     global iterations
     if url_list.empty() or iterations>MAX_DEPTH: return
     url = url_list.get()
-    #del url_list[0]
     data=''
     iterations+=1
     try:

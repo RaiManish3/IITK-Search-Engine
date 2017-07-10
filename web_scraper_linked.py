@@ -9,7 +9,7 @@ visited = []
 iterations = 0
 
 #although its possible to crawl qoura i am not doing that here
-do_not_visit_these = ['#$','facebook','linkedin','plus.google','instagram','quora','twitter','google']
+do_not_visit_these = ['^#','facebook','linkedin','plus.google','instagram','quora','twitter','google','youtube','javascript','oars','jpg','png','gif','pdf','mailto:','zip$','github']
 DNVreg = r''+ '|'.join(do_not_visit_these)
 
 def pageData(soup):
@@ -39,6 +39,7 @@ def scan_all_links(url_list,key):
     global iterations
     if url_list.empty() or iterations>MAX_DEPTH: return
     url = url_list.get()
+    print(url)
     visited.append(url)
     data=''
     iterations+=1
@@ -57,6 +58,12 @@ def scan_all_links(url_list,key):
             continue
         if re.search(DNVreg,the_url,re.IGNORECASE):
             continue
+        if 'http' not in the_url:
+            if 'www' not in the_url:
+                if the_url[0]!='/': the_url=url+'/'+the_url
+                else: the_url=url+the_url
+            else:
+                the_url='http:'+the_url
         if the_url not in visited:
             url_list.put(the_url)
 

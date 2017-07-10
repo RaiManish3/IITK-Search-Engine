@@ -22,7 +22,7 @@ def searchIITK(year):
     # make predictive.(i.e can handle common errors)
     key = input('Enter the search query: ')
     # for reg ex : we take key to be independent word
-    key = r'[\A\s]'+re.escape(key)+r'\s'
+    key = re.escape(key)
     #make a dictionary of all the links encountered having key
     links_dic={}
 

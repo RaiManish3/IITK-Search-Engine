@@ -8,8 +8,8 @@ import urllib.request as ul
 import re
 from bs4 import BeautifulSoup
 
-roll = 13001
-lim = 14000
+roll = 160001
+lim = 170000
 url = 'http://home.iitk.ac.in/~'
 should_keys = ['Roll No: ','Name: ','Program: ','Department: ','Hostel Info: ',' E-Mail: ',' Gender:',' Blood Group:',' CountryOfOrigin:','image']
 
@@ -50,7 +50,10 @@ def validWebPageTable():
     drop_table = """DROP TABLE valid_mails"""
     conn = sqlite3.connect('student.db')
     c = conn.cursor()
-    c.execute(drop_table)
+    try:
+        c.execute(drop_table)
+    except:
+        pass
     c.execute(table_heads)
     conn.close()
 

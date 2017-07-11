@@ -3,19 +3,20 @@ from elasticsearch import Elasticsearch
 from elasticsearch_dsl import *
 from elasticsearch_dsl.connections import connections
 
-## establish the connection between elasticSearch and python
-es = Elasticsearch()
-es = connections.create_connection(hosts=['re-es.canary'])
-
-def search():
+if __name__ == "__main__":
     # make predictive.(i.e can handle common errors)
-    key = input('Enter the search query: ')
+    key = raw_input('Enter the search query: ')
     lst_urls = []
 
+    ## establish the connection between elasticSearch and python
+    es = Elasticsearch(['http://localhost:9200/'],verify_certs=True)
+    #es = connections.create_connection(hosts=['re-es.canary'])
     es.indices.refresh(index="engine")
     search_body = {
             "query":{
-                "pageData":key
+                "match":{
+                    "pageData":key
+                    }
                 }
             }
 

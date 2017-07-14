@@ -143,4 +143,3 @@ def queryMail(year):
     data = c.fetchall()
     conn.close()
     return data
-

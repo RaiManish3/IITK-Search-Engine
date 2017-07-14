@@ -8,9 +8,10 @@ import db_amend as dbA
 
 
 base_url = 'http://home.iitk.ac.in/~'
-OUTFILE = 'tmp.json'
+OUTFILE = 'scrapedData.json'
 MAX_DEPTH = 10
-visited = []
+# hash functions have O(1) search time complexity on an average
+visited = {}
 iterations = 0
 
 f=open(OUTFILE,'w')
@@ -20,28 +21,17 @@ f.close()
 do_not_visit_these = ['^#','facebook','linkedin','instagram','quora','twitter','google','youtube','void','oars','jpg','png','gif','pdf','mailto:','zip$','github']
 DNVreg = r''+ '|'.join(do_not_visit_these)
 
-def pageData(soup):
-    texts = soup.findAll(text=True)
+def htmlText(soup):
+    for script in soup.find_all('script'):
+        script.extract()
+    for style in soup.find_all('style'):
+        style.extract()
+    data = ' '.join(soup.get_text().strip().split())
+    return data
 
-    """
-    try:
-        tmp = soup.find('iframe')['src']
-        print(tmp)
-    except:
-        pass
-    """
 
-    def visible(element):
-        if element.parent.name in ['style', 'script', '[document]', 'head']:
-            return False
-        elif re.match('<!--.*-->', str(element)):
-            return False
-        return True
-
-    visible_texts = filter(visible, texts)
-    strx = ' '.join(list(visible_texts))
-    strx = re.sub(r'\s',r' ', strx)
-    return ' '.join(strx.split())
+def getValidPage():
+    pass
 
 
 #the arguments to be passed , url_list  and key
@@ -50,7 +40,7 @@ def scan_all_links(url_list):
 
     if url_list.empty() or iterations>MAX_DEPTH: return
     url = url_list.get()
-    visited.append(url)
+    visited[url]=True
     print(url)
 
     data=''
@@ -63,6 +53,8 @@ def scan_all_links(url_list):
     # get all links on this page :: all links = <a> + <iframe>
     all_links = soup.find_all('a')
 
+    ## here try to ensure that only a valid looking url gets added to queue
+    # right now gets caught in appending 'the_url' at the end of 'url'
     for lk in all_links:
         the_url = lk.get('href')
         if not the_url:
@@ -80,7 +72,7 @@ def scan_all_links(url_list):
         if the_url not in visited:
             url_list.put(the_url)
 
-    all_text = pageData(soup)
+    all_text = htmlText(soup)
     if url.endswith('/'):
         url = url[:-1]
 
@@ -93,20 +85,19 @@ def scan_all_links(url_list):
 
 
 if __name__ == "__main__":
-    global iterations
-
     #------------------------------------------------------ all variables
     f=open(OUTFILE,'a')
-    year = 15
+    year = [15,]
     #------------------------------------------------------ all variables
 
-    mail_info = dbA.queryMail(year)
-    for (user,) in mail_info:
-        iterations = 0
-        #find all links on that page
-        #links_to makes more sense if it is Priority queue
-        q = queue.Queue()
-        q.put(base_url+user)
-        scan_all_links(q)
-        print(user)
+    for y in year:
+        mail_info = dbA.queryMail(y)
+        for (user,) in mail_info:
+            iterations = 0
+            #find all links on that page
+            #links_to makes more sense if it is Priority queue
+            q = queue.Queue()
+            q.put(base_url+user)
+            scan_all_links(q)
+            print(user)
     f.close()

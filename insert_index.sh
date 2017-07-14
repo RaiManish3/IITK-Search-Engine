@@ -1,5 +1,5 @@
 #gets a json spread over multiple lines and inserts " index " properties before each line
-filename="tmp"
+filename="scrapedData.json"
 filename2="final.json"
 
 truncate -s 0 $filename2

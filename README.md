@@ -18,8 +18,8 @@ The program is still under development.
 
 ## Running the program
 Follow the following steps to setup your own search-engine:
-   - create and update databases as defined in funtions in db_amend.py
-   - run `python fillUsers.py` to generate a list of users with available homepages.
+   - create and update databases as defined in funtions in db_amend.py . Use __python3__.
+   - run `python3 fillUsers.py` to generate a list of users with available homepages.
      - modify the year list according to your choice
    - then run `scrapy runspider crawler.py` to get the json file scrapedData.json
    - Now, with the data with us we need to create an index for it to be used in elasticsearch. I am using bulkAPI. So in this case insert_index.sh will do the thing. Simply run `bash insert_index.sh`
